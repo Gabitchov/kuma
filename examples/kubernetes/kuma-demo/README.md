@@ -2,10 +2,10 @@
 
 ## Setup Environment
 
-1. Start a Kubernetes cluster with version 1.15 or higher and at least 4GB of memory
+1. Start a Kubernetes cluster with at least 4GB of memory. We've tested Kuma on Kubernetes v1.13.0 - v1.16.x, so use anything older than v1.13.0 with caution. In this demo, we'll be using v1.15.4. 
 
 ```
-$ minikube start --kubernetes-version v1.15.4
+$ minikube start --cpus 2 --memory 4096 --kubernetes-version v1.15.4
 😄  minikube v1.4.0 on Darwin 10.14.6
 🔥  Creating virtualbox VM (CPUs=2, Memory=4096MB, Disk=20000MB) ...
 🐳  Preparing Kubernetes v1.15.4 on Docker 18.09.9 ...
