@@ -26,7 +26,7 @@ type RootRuntime struct {
 	Now                        func() time.Time
 	NewResourceStore           func(*config_proto.ControlPlaneCoordinates_ApiServer) (core_store.ResourceStore, error)
 	NewDataplaneOverviewClient func(*config_proto.ControlPlaneCoordinates_ApiServer) (kumactl_resources.DataplaneOverviewClient, error)
-	NewDataplaneTokenClient    func(string) (tokens.DataplaneTokenClient, error)
+	NewDataplaneTokenClient    func(string, *config_proto.DataplaneToken) (tokens.DataplaneTokenClient, error)
 	NewCoordinatesClient       func(string) (coordinates_client.CoordinatesClient, error)
 }
 
@@ -130,7 +130,21 @@ func (rc *RootContext) CurrentDataplaneTokenClient() (tokens.DataplaneTokenClien
 	if err != nil {
 		return nil, err
 	}
-	return rc.Runtime.NewDataplaneTokenClient(components.Apis.DataplaneToken.LocalUrl)
+	cp, err := rc.CurrentControlPlane()
+	if err != nil {
+		return nil, err
+	}
+
+	var url string
+	if cp.DataplaneToken.TlsEnabled() {
+		if components.Apis.DataplaneToken.PublicUrl == "" {
+			return nil, errors.New("dataplane token server is not configured with TLS. Either configure kuma-cp to start server with tls or configure kumactl without certificates")
+		}
+		url = components.Apis.DataplaneToken.PublicUrl
+	} else {
+		url = components.Apis.DataplaneToken.LocalUrl
+	}
+	return rc.Runtime.NewDataplaneTokenClient(url, cp.DataplaneToken)
 }
 
 func (rc *RootContext) IsFirstTimeUsage() bool {

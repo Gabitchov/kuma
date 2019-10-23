@@ -136,9 +136,12 @@ Usage:
   kumactl config control-planes add [flags]
 
 Flags:
-      --address string   URL of the Control Plane API Server (required)
-  -h, --help             help for add
-      --name string      reference name for the Control Plane (required)
+      --address string                       URL of the Control Plane API Server (required)
+      --dataplane-token-client-cert string   Path to certificate of a client that is authorized to use Dataplane Token Server
+      --dataplane-token-client-key string    Path to certificate key of a client that is authorized to use Dataplane Token Server
+      --dataplane-token-server-cert string   Path to certificate of Dataplane Token Server
+  -h, --help                                 help for add
+      --name string                          reference name for the Control Plane (required)
 
 Global Flags:
       --config-file string   path to the configuration file to use

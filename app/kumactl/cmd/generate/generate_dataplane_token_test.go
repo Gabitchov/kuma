@@ -7,6 +7,7 @@ import (
 	"github.com/Kong/kuma/app/kumactl/cmd"
 	kumactl_cmd "github.com/Kong/kuma/app/kumactl/pkg/cmd"
 	"github.com/Kong/kuma/app/kumactl/pkg/tokens"
+	config_kumactl "github.com/Kong/kuma/pkg/config/app/kumactl/v1alpha1"
 	"github.com/Kong/kuma/pkg/coordinates"
 	"github.com/Kong/kuma/pkg/coordinates/client"
 	. "github.com/onsi/ginkgo"
@@ -47,7 +48,7 @@ var _ = Describe("kumactl generate dataplane-token", func() {
 		generator = &staticDataplaneTokenGenerator{}
 		ctx := kumactl_cmd.RootContext{
 			Runtime: kumactl_cmd.RootRuntime{
-				NewDataplaneTokenClient: func(string) (tokens.DataplaneTokenClient, error) {
+				NewDataplaneTokenClient: func(string, *config_kumactl.DataplaneToken) (tokens.DataplaneTokenClient, error) {
 					return generator, nil
 				},
 				NewCoordinatesClient: func(s string) (client.CoordinatesClient, error) {
